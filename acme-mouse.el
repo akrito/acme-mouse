@@ -25,6 +25,7 @@
 (defun acme-down-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'left)
+  (mouse-set-mark click)
   (mouse-drag-region click))
 
 (defun acme-mouse-1 (click)
@@ -53,10 +54,15 @@
 
 (defun acme-down-mouse-3 (click arg)
   (interactive "e\nP")
-  (case acme-mouse-state
-    ('left (setq acme-mouse-state 'left-right)
-           (setq acme-dont-set-region t)
-           (yank arg))))
+  (if (eq acme-mouse-state 'left)
+      (progn
+        (setq acme-mouse-state 'left-right)
+        (if (eq acme-dont-set-region t)
+            (yank arg)
+          (setq acme-dont-set-region t)
+          (mouse-set-point click)
+          (delete-region (point) (mark))
+          (yank arg)))))
 
 (defun acme-mouse-3 (click)
   (interactive "e")
