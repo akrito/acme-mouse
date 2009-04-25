@@ -1,5 +1,15 @@
 (require 'cl)
+
+;; Currently acme-search acts like * in vim. We should rewrite it to
+;; act more like Acme:
+;; * If there's a region, match against it
+;; * If not, match against the word under the cursor
+;; * If a file matches the text, open or switch to it in a new window
+;; * Else, search through the file, wrapping at the bottom
 (require 'acme-search)
+
+;; Acme mouse chording doesn't make much sense without delete-selection mode
+(delete-selection-mode t)
 
 ;; default: mouse-drag-region
 (global-set-key [(down-mouse-1)] 'acme-down-mouse-1)
