@@ -49,9 +49,7 @@
 (defun acme-mouse-2 (click arg)
   (interactive "e\nP")
   (case acme-mouse-state
-    ('left-middle (setq acme-mouse-state 'left))
-    (t (setq acme-mouse-state 'none)
-       (mouse-yank-at-click click arg))))
+    ('left-middle (setq acme-mouse-state 'left))))
 
 (defun acme-down-mouse-3 (click arg)
   (interactive "e\nP")
