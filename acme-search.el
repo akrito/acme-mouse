@@ -50,12 +50,6 @@
 		 0))))
     (set-mouse-position (selected-frame) x y)))
 
-(defun blink-region (start end)
-  "Make the text between START and END blink."
-  (let ((overlay (make-overlay start end)))
-    (overlay-put overlay 'face 'region)
-    (run-at-time 0.1 nil 'delete-overlay overlay)))
-
 (defun acme-search (posn direction)
   "Search forward for the symbol under mouse, moving mouse and point forward.
 This is inspired by Rob Pike's Acme."
@@ -86,8 +80,7 @@ This is inspired by Rob Pike's Acme."
   (unless (posn-at-point)
     (universal-argument)
     (recenter))
-  (move-mouse-to-point)
-  (blink-region (match-beginning 0) (match-end 0)))
+  (move-mouse-to-point))
 
 (defun acme-search-forward (posn)
   (interactive "e")
