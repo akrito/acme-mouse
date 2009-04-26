@@ -54,15 +54,15 @@
 
 (defun acme-down-mouse-2 (click)
   (interactive "e")
-  (case acme-mouse-state
-    ('left (setq acme-mouse-state 'left-middle)
-           (setq acme-dont-set-region t)
-           (mouse-kill click))))
+  (if (eq acme-mouse-state 'left)
+      (progn (setq acme-mouse-state 'left-middle)
+             (setq acme-dont-set-region t)
+             (mouse-kill click))))
 
 (defun acme-mouse-2 (click arg)
   (interactive "e\nP")
-  (case acme-mouse-state
-    ('left-middle (setq acme-mouse-state 'left))))
+  (if (eq acme-mouse-state 'left-middle)
+      (setq acme-mouse-state 'left)))
 
 (defun acme-down-mouse-3 (click arg)
   (interactive "e\nP")
@@ -78,9 +78,9 @@
 
 (defun acme-mouse-3 (click)
   (interactive "e")
-  (case acme-mouse-state
-    ('left-right (setq acme-mouse-state 'left))
-    (t (setq acme-mouse-state 'none)
-       (acme-search-forward click))))
+  (if (eq acme-mouse-state 'left-right)
+      (setq acme-mouse-state 'left)
+    (setq acme-mouse-state 'none)
+    (acme-search-forward click)))
 
 (provide 'acme-mouse)
