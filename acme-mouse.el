@@ -36,8 +36,10 @@
   (interactive "e")
   (setq acme-mouse-state 'left)
   (mouse-set-mark click)
+  (setq acme-dont-set-region nil)
   (mouse-drag-region click))
 
+;; called if mouse doesn't move between button down and up
 (defun acme-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'none)
