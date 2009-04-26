@@ -6,9 +6,15 @@
 ;; * If not, match against the word under the cursor
 ;; * If a file matches the text, open or switch to it in a new window
 ;; * Else, search through the file, wrapping at the bottom
+;; Allow drag-highlighting with the right button (secondary selection?)
 (require 'acme-search)
 
-;; Acme mouse chording doesn't make much sense without delete-selection mode
+;; TODO:
+;; Reset the modification status when yank follows kill
+;; Make double-left-click + (middle or right) work - see mouse-start-end
+
+;; Acme mouse chording doesn't make much sense without
+;; delete-selection mode
 (delete-selection-mode t)
 
 ;; default: mouse-drag-region
@@ -46,6 +52,7 @@
   (setq acme-dont-set-region nil)
   (mouse-set-point click))
 
+;; called if mouse moves between button down and up
 (defun acme-drag-mouse-1 (click)
   (interactive "e")
   (if (eq acme-dont-set-region nil)
