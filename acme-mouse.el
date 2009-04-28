@@ -6,7 +6,7 @@
 ;; * If not, match against the word under the cursor
 ;; * If a file matches the text, open or switch to it in a new window
 ;; * Else, search through the file, wrapping at the bottom
-;; Allow drag-highlighting with the right button (secondary selection?)
+;; * Allow drag-highlighting with the right button (secondary selection?)
 (require 'acme-search)
 
 ;; TODO:
@@ -50,14 +50,18 @@
   (interactive "e")
   (setq acme-mouse-state 'none)
   (setq acme-dont-set-region nil)
-  (mouse-set-point click))
+  (mouse-set-point click)
+  (setq deactivate-mark nil)
+  (exchange-point-and-mark))
 
 ;; called if mouse moves between button down and up
 (defun acme-drag-mouse-1 (click)
   (interactive "e")
   (if (eq acme-dont-set-region nil)
       (mouse-set-region click))
-  (setq acme-dont-set-region nil))
+  (setq acme-dont-set-region nil)
+  (setq deactivate-mark nil)
+  (exchange-point-and-mark))
 
 (defun acme-down-mouse-2 (click)
   (interactive "e")
@@ -81,13 +85,17 @@
           (setq acme-dont-set-region t)
           (mouse-set-point click)
           (delete-region (point) (mark))
-          (yank arg)))))
+          (yank arg))))
+  (setq deactivate-mark nil)
+  (exchange-point-and-mark))
 
 (defun acme-mouse-3 (click)
   (interactive "e")
   (if (eq acme-mouse-state 'left-right)
       (setq acme-mouse-state 'left)
     (setq acme-mouse-state 'none)
-    (acme-search-forward click)))
+    (acme-search-forward click))
+  (setq deactivate-mark nil)
+  (exchange-point-and-mark))
 
 (provide 'acme-mouse)
