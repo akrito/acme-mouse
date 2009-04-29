@@ -1,17 +1,20 @@
 (require 'cl)
 
+;; Implements Acme-style mouse chording in Emacs
+;; Copyright 2009 Alex Kritikos
+
+;; TODO
 ;; Currently acme-search acts like * in vim. We should rewrite it to
 ;; act more like Acme:
-;; * If there's a region, match against it
-;; * If not, match against the word under the cursor
-;; * If a file matches the text, open or switch to it in a new window
-;; * Else, search through the file, wrapping at the bottom
-;; * Allow drag-highlighting with the right button (secondary selection?)
-(require 'acme-search)
-
-;; TODO:
+;;   If there's a region, match against it
+;;   If not, match against the word under the cursor
+;;   If a file matches the text, open or switch to it in a new window
+;;   Else, search through the file, wrapping at the bottom
+;;   Allow drag-highlighting with the right button (secondary selection?)
+;;
 ;; Reset the modification status when yank follows kill
-;; Make double-left-click + (middle or right) work - see mouse-start-end
+
+(require 'acme-search)
 
 ;; Acme mouse chording doesn't make much sense without
 ;; delete-selection mode
