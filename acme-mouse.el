@@ -47,6 +47,9 @@
 ;; Sometimes the region is active after the command, when we don't
 ;; want it to be. Leads to large highlighted regions
 
+;; Cutting or Pasting, then moving the arrow keys extends the
+;; region. Moving the arrow keys should remove the region
+
 (require 'cl)
 (require 'acme-search)
 
