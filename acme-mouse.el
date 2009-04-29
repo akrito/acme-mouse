@@ -1,9 +1,36 @@
-(require 'cl)
+;;; acme-mouse.el --- mouse-button chording
 
-;; Implements Acme-style mouse chording in Emacs
-;; Copyright 2009 Alex Kritikos
+;; Author: Alex Kritikos (my gmail.com username is alex.kritikos)
+;; Copyright (C) 2009, Alex Kritikos, see section 'Terms'.
 
-;; TODO
+;; Description:
+
+;; The Acme editor from Plan 9 has very nice two-button mouse chords
+;; for cut, copy and paste, and a handy right-click "find"
+;; function. Please see http://swtch.com/plan9port/man/man1/acme.html
+;; and http://plan9.bell-labs.com/sys/doc/acme/acme.pdf for more
+;; information on how the chords are used. This package aims to work
+;; the same as much as makes sense for Emacs.
+
+;; Terms:
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
+
+;; Todo:
+
 ;; Currently acme-search acts like * in vim. We should rewrite it to
 ;; act more like Acme:
 ;;   If there's a region, match against it
@@ -11,13 +38,16 @@
 ;;   If a file matches the text, open or switch to it in a new window
 ;;   Else, search through the file, wrapping at the bottom
 ;;   Allow drag-highlighting with the right button (secondary selection?)
-;;
-;; Reset the modification status when yank follows kill or kill follows yank
-;;
-;; Once a chord is pressed, don't let the mouse figure into region
-;; calculations. Consider them frozen. It's like there's a selection
-;; mode, then a command mode.
 
+;; Make this a proper minor mode without clobbering keymaps and global
+;; settings
+
+;; Clicks in the gutter/margin don't seem to work right
+
+;; Sometimes the region is active after the command, when we don't
+;; want it to be. Leads to large highlighted regions
+
+(require 'cl)
 (require 'acme-search)
 
 ;; Acme mouse chording doesn't make much sense without
