@@ -147,7 +147,7 @@
                 (goto-char acme-end)))
         (setq acme-last-command 'paste)
         (setq deactivate-mark nil)
-        (exchange-point-and-mark))))
+        (activate-mark))))
 
 (defun acme-mouse-3 (click)
   (interactive "e")
