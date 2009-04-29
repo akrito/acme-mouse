@@ -12,7 +12,11 @@
 ;;   Else, search through the file, wrapping at the bottom
 ;;   Allow drag-highlighting with the right button (secondary selection?)
 ;;
-;; Reset the modification status when yank follows kill
+;; Reset the modification status when yank follows kill or kill follows yank
+;;
+;; Once a chord is pressed, don't let the mouse figure into region
+;; calculations. Consider them frozen. It's like there's a selection
+;; mode, then a command mode.
 
 (require 'acme-search)
 
@@ -95,8 +99,9 @@
                    (let ((range (mouse-start-end (mark) (point) mouse-selection-click-count)))
                      (set-mark (car range))
                      (goto-char (nth 1 range))
-                     (delete-region (mark) (point)))))
-        (yank arg)
+                     (delete-region (mark) (point)))
+                   (yank arg))
+          (undo))
         (setq deactivate-mark nil)
         (exchange-point-and-mark))))
 
