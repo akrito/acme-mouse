@@ -97,6 +97,7 @@
   (setq deactivate-mark nil)
   (if (eq acme-last-command 'none)
       (mouse-set-point click))
+  (setq transient-mark-mode (cons 'only t))
   (setq acme-last-command 'none))
 
 ;; called if mouse moves between button down and up
@@ -106,6 +107,7 @@
       (mouse-set-region click)
     (setq deactivate-mark nil)
     (exchange-point-and-mark))
+  (setq transient-mark-mode (cons 'only t))
   (setq acme-last-command 'none))
 
 (defun acme-down-mouse-2 (click)
