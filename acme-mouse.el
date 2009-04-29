@@ -41,40 +41,46 @@
 ;; default: mouse-save-then-kill
 (global-set-key [(mouse-3)] 'acme-mouse-3)
 
+;; everything starts with this function, so set state accordingly
 (defun acme-down-mouse-1 (click)
   (interactive "e")
+  ;; which buttons are currently pressed?
   (setq acme-mouse-state 'left)
   (mouse-set-mark click)
-  (setq acme-dont-set-region nil)
+  (setq acme-cut nil)
+  (setq acme-pasted nil)
+  ;; pass to regular click handler
   (mouse-drag-region click))
 
 ;; called if mouse doesn't move between button down and up
 (defun acme-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'none)
-  (setq acme-dont-set-region nil)
-  (mouse-set-point click)
   (setq deactivate-mark nil)
-  (exchange-point-and-mark))
+  (mouse-set-point click))
 
 ;; called if mouse moves between button down and up
 (defun acme-drag-mouse-1 (click)
   (interactive "e")
-  (if (eq acme-dont-set-region nil)
+  (if (eq acme-cut nil)
       (mouse-set-region click))
-  (setq acme-dont-set-region nil)
-  (setq deactivate-mark nil)
-  (exchange-point-and-mark))
+  (if acme-pasted
+      (progn (setq deactivate-mark nil)
+             (exchange-point-and-mark))))
 
 (defun acme-down-mouse-2 (click)
   (interactive "e")
   (if (eq acme-mouse-state 'left)
       (progn (setq acme-mouse-state 'left-middle)
-             (setq acme-dont-set-region t)
-             (mouse-kill click))))
+             (setq acme-cut t)
+             (mouse-set-point click)
+             (let ((range (mouse-start-end (mark) (point) mouse-selection-click-count)))
+               (set-mark (car range))
+               (goto-char (nth 1 range))
+               (kill-region (mark) (point))))))
 
-(defun acme-mouse-2 (click arg)
-  (interactive "e\nP")
+(defun acme-mouse-2 ()
+  (interactive)
   (if (eq acme-mouse-state 'left-middle)
       (setq acme-mouse-state 'left)))
 
@@ -83,22 +89,21 @@
   (if (eq acme-mouse-state 'left)
       (progn
         (setq acme-mouse-state 'left-right)
-        (if (eq acme-dont-set-region t)
-            (yank arg)
-          (setq acme-dont-set-region t)
-          (mouse-set-point click)
-          (delete-region (point) (mark))
-          (yank arg))))
-  (setq deactivate-mark nil)
-  (exchange-point-and-mark))
+        (if (eq acme-cut nil)
+            (progn (setq acme-pasted t)
+                   (mouse-set-point click)
+                   (let ((range (mouse-start-end (mark) (point) mouse-selection-click-count)))
+                     (set-mark (car range))
+                     (goto-char (nth 1 range))
+                     (delete-region (mark) (point)))))
+        (yank arg)
+        (setq deactivate-mark nil)
+        (exchange-point-and-mark))))
 
 (defun acme-mouse-3 (click)
   (interactive "e")
   (if (eq acme-mouse-state 'left-right)
       (setq acme-mouse-state 'left)
-    (setq acme-mouse-state 'none)
-    (acme-search-forward click))
-  (setq deactivate-mark nil)
-  (exchange-point-and-mark))
+    (acme-search-forward click)))
 
 (provide 'acme-mouse)
