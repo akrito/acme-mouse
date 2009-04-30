@@ -56,6 +56,8 @@
 (delete-selection-mode t)
 ;; Acme doesn't set the selection until you explicitly copy
 (setq mouse-drag-copy-region nil)
+(setq acme-mouse-state 'none)
+(setq acme-last-command 'none)
 
 ;; default: mouse-drag-region
 (global-set-key [(down-mouse-1)] 'acme-down-mouse-1)
