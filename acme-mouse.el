@@ -50,8 +50,9 @@
 ;; Cutting or Pasting, then moving the arrow keys extends the
 ;; region. Moving the arrow keys should remove the region
 
+;; Double-click, then mouse 3 pastes instead of searches
+
 (require 'cl)
-(require 'acme-search)
 
 ;; Acme mouse chording doesn't make much sense without
 ;; delete-selection mode
@@ -107,6 +108,7 @@
       (mouse-set-region click)
     (setq deactivate-mark nil)
     (exchange-point-and-mark))
+  (setq acme-mouse-state 'none)
   (setq transient-mark-mode (cons 'only t))
   (setq acme-last-command 'none))
 
@@ -155,6 +157,46 @@
   (interactive "e")
   (if (eq acme-mouse-state 'left-right)
       (setq acme-mouse-state 'left)
-    (acme-search-forward click)))
+    (acme-search click)))
+
+;; Search - modified from Dan McCarthy's acme-search.el
+
+(defun header-line-active-p ()
+  (not (null header-line-format)))
+
+(defun move-mouse-to-point ()
+  "Move the mouse pointer to point in the current window."
+  (let* ((coords (posn-col-row (posn-at-point)))
+	 (window-coords (window-inside-edges))
+	 (x (+ (car coords) (car window-coords) -1)) ;the fringe is 0
+	 (y (+ (cdr coords) (cadr window-coords)
+	       (if (header-line-active-p)
+		   -1
+		 0))))
+    (set-mouse-position (selected-frame) x y)))
+
+(defun acme-search (posn)
+  "Search forward for the symbol under mouse, moving mouse and point forward.
+This is inspired by Rob Pike's Acme."
+  (let ((sym (if (region-active-p)
+                 (buffer-substring (mark) (point))
+               (mouse-set-point posn)
+               (thing-at-point 'symbol))))
+    (if (search-forward sym nil t)
+        (progn (set-mark (point))
+               (search-backward sym nil t)
+               (exchange-point-and-mark))
+      (let ((saved-point (point)))
+        (goto-char (point-min))
+        (if (search-forward sym nil t)
+            (progn (set-mark (point))
+                   (search-backward sym nil t)
+                   (exchange-point-and-mark))
+          (goto-char saved-point)))))
+  ;;Redisplay the screen if we search off the bottom of the window.
+  (unless (posn-at-point)
+    (universal-argument)
+    (recenter))
+  (move-mouse-to-point))
 
 (provide 'acme-mouse)
