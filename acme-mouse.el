@@ -130,7 +130,8 @@
                (mouse-set-point click)
                (acme-select-region)
                (kill-region (mark) (point)))
-             (setq acme-last-command 'cut))))
+             (setq acme-last-command 'cut))
+    (mouse-major-mode-menu click)))
 
 (defun acme-mouse-2 ()
   (interactive)
