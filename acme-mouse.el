@@ -39,9 +39,8 @@
 ;; Clicks in the gutter/margin don't seem to work right
 
 ;; Sometimes the region is active after the command, when we don't
-;; want it to be. Leads to large highlighted regions
-
-;; Triple-click, then mouse 3 pastes instead of searches
+;; want it to be. Leads to large highlighted regions. Goes away after
+;; a click.
 
 (require 'cl)
 
@@ -61,8 +60,11 @@
 
 ;; default: mouse-set-region
 (global-set-key [(drag-mouse-1)] 'acme-drag-mouse-1)
+(global-set-key [(double-drag-mouse-1)] 'acme-double-mouse-1)
+(global-set-key [(triple-drag-mouse-1)] 'acme-double-mouse-1)
 
 (global-set-key [(double-mouse-1)] 'acme-double-mouse-1)
+(global-set-key [(triple-mouse-1)] 'acme-double-mouse-1)
 
 ;; default: none
 (global-set-key [(down-mouse-2)] 'acme-down-mouse-2)
@@ -96,13 +98,6 @@
   (setq transient-mark-mode (cons 'only t))
   (setq acme-last-command 'none))
 
-;; called if mouse moves between button down and up
-(defun acme-drag-mouse-1 (click)
-  (interactive "e")
-  (if (eq acme-last-command 'none)
-      (mouse-set-region click))
-  (acme-mouse-1 click))
-
 (defun acme-double-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'none)
@@ -113,6 +108,13 @@
              (acme-select-region)))
   (setq transient-mark-mode (cons 'only t))
   (setq acme-last-command 'none))
+
+;; called if mouse moves between button down and up
+(defun acme-drag-mouse-1 (click)
+  (interactive "e")
+  (if (eq acme-last-command 'none)
+      (mouse-set-region click))
+  (acme-mouse-1 click))
 
 (defun acme-select-region ()
   (let ((range (mouse-start-end (mark) (point) mouse-selection-click-count)))
