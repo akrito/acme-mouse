@@ -85,8 +85,8 @@
   (interactive "e")
   ;; which buttons are currently pressed?
   (setq acme-mouse-state 'left)
-  (mouse-set-mark click)
   (setq acme-last-command 'none)
+  (mouse-set-mark click)
   ;; pass to regular click handler
   (mouse-drag-region click))
 
