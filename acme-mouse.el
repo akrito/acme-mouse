@@ -31,13 +31,7 @@
 
 ;; Todo:
 
-;; Currently acme-search acts like * in vim. We should rewrite it to
-;; act more like Acme:
-;;   If there's a region, match against it - done
-;;   If not, match against the word under the cursor - done
-;;   If a file matches the text, open or switch to it in a new window
-;;   Else, search through the file, wrapping at the bottom - done
-;;   Allow drag-highlighting with the right button (secondary selection?)
+;; Allow drag-highlighting with the right button (secondary selection?)
 
 ;; Make this a proper minor mode without clobbering keymaps and global
 ;; settings
@@ -47,7 +41,7 @@
 ;; Sometimes the region is active after the command, when we don't
 ;; want it to be. Leads to large highlighted regions
 
-;; Double-click, then mouse 3 pastes instead of searches
+;; Triple-click, then mouse 3 pastes instead of searches
 
 (require 'cl)
 
