@@ -62,6 +62,8 @@
 ;; default: mouse-set-region
 (global-set-key [(drag-mouse-1)] 'acme-drag-mouse-1)
 
+(global-set-key [(double-mouse-1)] 'acme-double-mouse-1)
+
 ;; default: none
 (global-set-key [(down-mouse-2)] 'acme-down-mouse-2)
 
@@ -101,7 +103,6 @@
       (mouse-set-region click))
   (acme-mouse-1 click))
 
-(global-set-key [(double-mouse-1)] 'acme-double-mouse-1)
 (defun acme-double-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'none)
@@ -175,6 +176,13 @@
 		 0))))
     (set-mouse-position (selected-frame) x y)))
 
+(defun acme-highlight-search (sym)
+  "Set the region to the current search result. Assume point is
+at the end of the result."
+  (set-mark (point))
+  (search-backward sym nil t)
+  (exchange-point-and-mark))
+
 (defun acme-search (posn)
   "Search forward for the symbol under mouse, moving mouse and point forward.
 This is inspired by Rob Pike's Acme."
@@ -185,15 +193,12 @@ This is inspired by Rob Pike's Acme."
     (if (file-readable-p sym)
         (special-display-popup-frame (find-file-noselect sym nil nil nil))
       (if (search-forward sym nil t)
-          (progn (set-mark (point))
-                 (search-backward sym nil t)
-                 (exchange-point-and-mark))
+          (acme-highlight-search sym)
         (let ((saved-point (point)))
+          (message "Wrapped search")
           (goto-char (point-min))
           (if (search-forward sym nil t)
-              (progn (set-mark (point))
-                     (search-backward sym nil t)
-                     (exchange-point-and-mark))
+              (acme-highlight-search sym)
             (goto-char saved-point)))))
     ;;Redisplay the screen if we search off the bottom of the window.
     (unless (posn-at-point)
