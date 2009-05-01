@@ -131,7 +131,7 @@
                (acme-select-region)
                (kill-region (mark) (point)))
              (setq acme-last-command 'cut))
-    (mouse-major-mode-menu click)))
+    (popup-menu (mouse-menu-major-mode-map) click)))
 
 (defun acme-mouse-2 ()
   (interactive)
