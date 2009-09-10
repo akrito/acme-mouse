@@ -190,7 +190,7 @@ This is inspired by Rob Pike's Acme."
   (let ((sym (if (region-active-p)
                  (buffer-substring (mark) (point))
                (mouse-set-point posn)
-               (thing-at-point 'symbol))))
+               (thing-at-point 'filename))))
     (if (file-readable-p sym)
         (special-display-popup-frame (find-file-noselect sym nil nil nil))
       (if (search-forward sym nil t)
