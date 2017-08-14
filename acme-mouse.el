@@ -191,7 +191,8 @@ This is inspired by Rob Pike's Acme."
                  (buffer-substring (mark) (point))
                (mouse-set-point posn)
                (thing-at-point 'filename))))
-    (if (file-readable-p sym)
+    (and sym
+      (if (file-readable-p sym)
         (special-display-popup-frame (find-file-noselect sym nil nil nil))
       (if (search-forward sym nil t)
           (acme-highlight-search sym)
@@ -200,7 +201,7 @@ This is inspired by Rob Pike's Acme."
           (goto-char (point-min))
           (if (search-forward sym nil t)
               (acme-highlight-search sym)
-            (goto-char saved-point)))))
+            (goto-char saved-point))))))
     ;;Redisplay the screen if we search off the bottom of the window.
     (unless (posn-at-point)
       (universal-argument)
