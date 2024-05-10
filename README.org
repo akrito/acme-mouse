@@ -1,0 +1,1 @@
+This fork includes modifications to keep up with the changes to the ~cl~ package, as well as a modification to the ~acme-search~ function, which resets the point if you click on a different symbol (as acme does)
