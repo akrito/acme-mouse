@@ -187,11 +187,15 @@ at the end of the result."
 (defun acme-search (posn)
   "Search forward for the symbol under mouse, moving mouse and point forward.
 This is inspired by Rob Pike's Acme."
-  (let ((sym (if (and (region-active-p)
-		      (eq posn (point)))
-		 (buffer-substring (mark) (point))
+  (let* ((newpoint (progn
+		    (mouse-set-point posn)
+		    (point)))
+	(sym (if (and (region-active-p)
+		      (< newpoint (region-end))
+		      (> newpoint (region-beginning)))
+		 (buffer-substring (region-beginning) (region-end))
 	       (mouse-set-point posn)
-	       (thing-at-point 'filename))))
+	       (thing-at-point 'word))))
     (if (file-readable-p sym)
 	(special-display-popup-frame (find-file-noselect sym nil nil nil))
       (if (search-forward sym nil t)
