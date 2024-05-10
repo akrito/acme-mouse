@@ -129,7 +129,9 @@
 	       (acme-select-region)
 	       (kill-region (mark) (point)))
 	     (setq acme-last-command 'cut))
-    (popup-menu (mouse-menu-major-mode-map) click)))
+    (if (eq nil (push-button click))
+	(mouse-set-point click)
+      (push-button click))))
 
 (defun acme-mouse-2 ()
   (interactive)

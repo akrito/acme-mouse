@@ -1,1 +1,17 @@
-This fork includes modifications to keep up with the changes to the ~cl~ package, as well as a modification to the ~acme-search~ function, which resets the point if you click on a different symbol (as acme does)
+#+TITLE: README
+
+This fork includes modifications to keep up with the changes to the ~cl~ package, as well as modifications to more closely match acme's behaviors.
+* Modified functions
+:PROPERTIES:
+:ID:       dda3435f-7e79-4505-aa2b-ef8634b3dd1c
+:END:
+** acme-search
+:PROPERTIES:
+:ID:       cd6ce98f-6e3d-4f75-babd-9b624c853580
+:END:
+The ~acme-search~ function (single click on ~mouse-3~) now resets the point if you click on a different symbol.
+** acme-down-mouse-2
+:PROPERTIES:
+:ID:       da7c7af9-22ec-4d38-abd9-7b86a761d284
+:END:
+Clicking ~mouse-2~ without chording now either sets point or clicks a button/link.
