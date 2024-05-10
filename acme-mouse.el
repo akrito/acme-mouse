@@ -40,8 +40,6 @@
 ;; want it to be. Leads to large highlighted regions. Goes away after
 ;; a click.
 
-(require 'cl)
-
 ;; Acme mouse chording doesn't make much sense without
 ;; delete-selection mode
 (delete-selection-mode t)
@@ -103,7 +101,7 @@
   ;; if we were just selecting, and not chording, pass to the regular click handler
   (if (eq acme-last-command 'none)
       (progn (mouse-set-point click)
-             (acme-select-region)))
+	     (acme-select-region)))
   (setq transient-mark-mode (cons 'only t))
   (setq acme-last-command 'none))
 
@@ -125,12 +123,12 @@
   (interactive "e")
   (if (eq acme-mouse-state 'left)
       (progn (setq acme-mouse-state 'left-middle)
-             (if (eq acme-last-command 'paste)
-                 (undo)
-               (mouse-set-point click)
-               (acme-select-region)
-               (kill-region (mark) (point)))
-             (setq acme-last-command 'cut))
+	     (if (eq acme-last-command 'paste)
+		 (undo)
+	       (mouse-set-point click)
+	       (acme-select-region)
+	       (kill-region (mark) (point)))
+	     (setq acme-last-command 'cut))
     (popup-menu (mouse-menu-major-mode-map) click)))
 
 (defun acme-mouse-2 ()
@@ -142,18 +140,18 @@
   (interactive "e\nP")
   (if (eq acme-mouse-state 'left)
       (progn
-        (setq acme-mouse-state 'left-right)
-        (case acme-last-command
-          ('none (mouse-set-point click)
-                 (acme-select-region)
-                 (delete-region (mark) (point))
-                 (yank arg))
-          ('cut (undo)
-                (set-mark acme-start)
-                (goto-char acme-end)))
-        (setq acme-last-command 'paste)
-        (setq deactivate-mark nil)
-        (activate-mark))))
+	(setq acme-mouse-state 'left-right)
+	(cl-case acme-last-command
+	  (none (mouse-set-point click)
+		(acme-select-region)
+		(delete-region (mark) (point))
+		(yank arg))
+	  (cut (undo)
+	       (set-mark acme-start)
+	       (goto-char acme-end)))
+	(setq acme-last-command 'paste)
+	(setq deactivate-mark nil)
+	(activate-mark))))
 
 (defun acme-mouse-3 (click)
   (interactive "e")
@@ -187,20 +185,21 @@ at the end of the result."
 (defun acme-search (posn)
   "Search forward for the symbol under mouse, moving mouse and point forward.
 This is inspired by Rob Pike's Acme."
-  (let ((sym (if (region-active-p)
-                 (buffer-substring (mark) (point))
-               (mouse-set-point posn)
-               (thing-at-point 'filename))))
+  (let ((sym (if (and (region-active-p)
+		      (eq posn (point)))
+		 (buffer-substring (mark) (point))
+	       (mouse-set-point posn)
+	       (thing-at-point 'filename))))
     (if (file-readable-p sym)
-        (special-display-popup-frame (find-file-noselect sym nil nil nil))
+	(special-display-popup-frame (find-file-noselect sym nil nil nil))
       (if (search-forward sym nil t)
-          (acme-highlight-search sym)
-        (let ((saved-point (point)))
-          (message "Wrapped search")
-          (goto-char (point-min))
-          (if (search-forward sym nil t)
-              (acme-highlight-search sym)
-            (goto-char saved-point)))))
+	  (acme-highlight-search sym)
+	(let ((saved-point (point)))
+	  (message "Wrapped search")
+	  (goto-char (point-min))
+	  (if (search-forward sym nil t)
+	      (acme-highlight-search sym)
+	    (goto-char saved-point)))))
     ;;Redisplay the screen if we search off the bottom of the window.
     (unless (posn-at-point)
       (universal-argument)
