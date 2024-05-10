@@ -9,7 +9,7 @@ This fork includes modifications to keep up with the changes to the ~cl~ package
 :PROPERTIES:
 :ID:       cd6ce98f-6e3d-4f75-babd-9b624c853580
 :END:
-The ~acme-search~ function (single click on ~mouse-3~) now resets the point if you click on a different word, and keeps the same region if you click within it [[https://www.reddit.com/r/emacs/comments/1coumhm/elisp_determine_if_mouse_posn_is_within_region/l3gqj4c/][Thanks u/Slow-Mammoth7380!]]
+The ~acme-search~ function (single click on ~mouse-3~) now resets the point if you click on a different word, and keeps the same region if you click within it. [[https://www.reddit.com/r/emacs/comments/1coumhm/elisp_determine_if_mouse_posn_is_within_region/l3gqj4c/][Thanks u/Slow-Mammoth7380!]]
 ** acme-down-mouse-2
 :PROPERTIES:
 :ID:       da7c7af9-22ec-4d38-abd9-7b86a761d284
