@@ -40,6 +40,8 @@
 ;; want it to be. Leads to large highlighted regions. Goes away after
 ;; a click.
 
+;;; Code:
+
 ;; Acme mouse chording doesn't make much sense without
 ;; delete-selection mode
 (delete-selection-mode t)
