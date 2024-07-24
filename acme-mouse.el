@@ -37,9 +37,7 @@
 
 ;;; Code:
 
-;; Acme mouse chording doesn't make much sense without
-;; delete-selection mode
-(delete-selection-mode t)
+(delete-selection-mode t) ; Acme mouse chording doesn't make much sense without delete-selection mode
 
 ;; Acme doesn't set the selection until you explicitly copy
 (setq mouse-drag-copy-region nil)
@@ -110,7 +108,7 @@
   (if (eq acme-mouse-state 'left-middle)
       (setq acme-mouse-state 'left)
     (if (use-region-p)
-        (eval-region (region-beginning) (region-end))
+        (eval-region (region-beginning) (region-end) t)
       (eval-defun nil))))
 
 (defun acme-drag-mouse-2 (click)
@@ -234,3 +232,4 @@ You can enable this mode locally in desired buffers, or use
   turn-on-acme-mouse-mode)
 
 (provide 'acme-mouse)
+;;; acme-mouse.el ends here
