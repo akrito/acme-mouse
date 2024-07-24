@@ -17,4 +17,4 @@ Dragging with ~mouse-3~ now sets region and searches for said region.  If the ne
 :PROPERTIES:
 :ID:       da7c7af9-22ec-4d38-abd9-7b86a761d284
 :END:
-Clicking ~mouse-2~ without chording and without dragging now either calls ~eval-defun~ or clicks a button/link.  If ~mouse-2~ is drug, region is set, and then ~eval-region~ is called.
+Clicking ~mouse-2~ without chording and without dragging now either clicks a button/link or calls ~eval-defun~ if outside of a region, or ~eval-region~ if within an active region.  If ~mouse-2~ is drug, region is set, and then ~eval-region~ is called.

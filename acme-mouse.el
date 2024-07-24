@@ -100,7 +100,7 @@
           (kill-region (region-beginning) (region-end)))
         (setq acme-last-command 'cut))
     (if (eq nil (push-button click))
-        (progn
+        (unless (mouse-click-in-region-p click)
           (mouse-set-mark click)
           (mouse-drag-region click))
       (push-button click))))
