@@ -54,21 +54,21 @@
 (defun acme-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'none
-        deactivate-mark nil)
+	deactivate-mark nil)
   (if (eq acme-last-command 'none)
       (mouse-set-point click))
-  (setq transient-mark-mode (cons 'only t)
-        acme-last-command 'none))
+  (setq transient-mark-mode (cons 'only nil)
+	acme-last-command 'none))
 
 (defun acme-double-mouse-1 (click)
   (interactive "e")
   (setq acme-mouse-state 'none
-        deactivate-mark nil)
+	deactivate-mark nil)
   (when (eq acme-last-command 'none) ; if just selecting, and not chording, pass to the regular click handler
     (mouse-set-point click)
     (acme-mouse--select-region))
-  (setq transient-mark-mode (cons 'only t)
-        acme-last-command 'none))
+  (setq transient-mark-mode (cons 'only nil)
+	acme-last-command 'none))
 
 ;; MOUSE-2
 
