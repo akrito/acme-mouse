@@ -57,8 +57,7 @@
 	deactivate-mark nil)
   (if (eq acme-last-command 'none)
       (mouse-set-point click))
-  (setq-local transient-mark-mode (cons 'only transient-mark-mode)
-	      acme-last-command 'none))
+  (acme-mouse--end-click))
 
 (defun acme-double-mouse-1 (click)
   (interactive "e")
@@ -67,8 +66,7 @@
   (when (eq acme-last-command 'none) ; if just selecting, and not chording, pass to the regular click handler
     (mouse-set-point click)
     (acme-mouse--select-region))
-  (setq-local transient-mark-mode (cons 'only transient-mark-mode)
-	      acme-last-command 'none))
+  (acme-mouse--end-click))
 
 ;; MOUSE-2
 
@@ -113,7 +111,8 @@
 		    (goto-char acme-end)))
 	     (setq acme-last-command 'paste)
 	     (setq deactivate-mark nil)
-	     (activate-mark))
+	     (activate-mark)
+	     (acme-mouse--show-region))
     (unless (acme-mouse--click-in-region-p click)
       (mouse-set-mark click)
       (mouse-drag-region click))))
@@ -124,7 +123,8 @@
       (setq acme-mouse-state 'left)
     (if (acme-mouse--click-in-region-p click)
 	(acme-mouse--search (buffer-substring (region-beginning) (region-end)))
-      (acme-mouse--search (progn (mouse-set-point click) (thing-at-point 'word))))))
+      (acme-mouse--search (progn (mouse-set-point click) (thing-at-point 'word))))
+    (acme-mouse--show-region)))
 
 ;; INTERNAL/HELPERS
 
@@ -134,6 +134,20 @@
      (if (eq acme-last-command 'none)
 	 (mouse-set-region click))
      (,func click)))
+
+(defun acme-mouse--show-region ()
+  ;; Show the region a click, chord, or search left in temporary Transient
+  ;; Mark mode, as `mouse-set-region-1' does. Wrap only an active mark and
+  ;; only once, so no wrap lingers unwound and none nests.
+  (when (and mark-active
+	     (not (eq (car-safe transient-mark-mode) 'only)))
+    (setq-local transient-mark-mode
+		(cons 'only (unless (eq transient-mark-mode 'lambda)
+			      transient-mark-mode)))))
+
+(defun acme-mouse--end-click ()
+  (acme-mouse--show-region)
+  (setq acme-last-command 'none))
 
 (defun acme-mouse--select-region ()
   (let ((range (mouse-start-end (mark) (point) mouse-selection-click-count)))
