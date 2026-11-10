@@ -34,10 +34,6 @@
 ;; Currently using the normal triple-click to select a line and be able to
 ;; chord.
 
-;; Sometimes the region is active after the command, when we don't
-;; want it to be. Leads to large highlighted regions. Goes away after
-;; a click.
-
 ;;; Code:
 
 ;; MOUSE-1
